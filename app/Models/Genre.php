@@ -4,14 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Genre;
+use App\Models\Book;
 
-class Book extends Model
+class Genre extends Model
 {
     use HasFactory;
 
-    public function genre(){
+    protected $table = 'genre';
 
-        return $this->belongsTo(Genre::class);
+    public function books(){
+
+        return $this->hasMany(Book::class);
     }
 }

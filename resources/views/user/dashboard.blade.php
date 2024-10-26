@@ -7,22 +7,22 @@
     <title>User Page</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="sticky-top navbar navbar-expand-lg bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Navbar</a>
+          <a class="navbar-brand text-white" href="#">Online Library</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                <a class="nav-link active text-white" aria-current="page" href="/">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link text-white" href="#">Link</a>
               </li>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Dropdown
                 </a>
                 <ul class="dropdown-menu">
@@ -32,50 +32,95 @@
                   <li><a class="dropdown-item" href="#">Something else here</a></li>
                 </ul>
               </li>
-              <li class="nav-item">
-                <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-              </li>
             </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
+            <form action="{{ route('logout') }}" method="POST">
+              @csrf
+              <button type="submit" class="btn btn-outline-danger">Logout</button>
             </form>
           </div>
         </div>
       </nav>
-    <h1>Welcome to User Page</h1>
+    
+    <h1 class="pt-5 text-center">Welcome to User Page</h1>
 
-    <form action="{{ route('logout') }}" method="POST">
-        @csrf
-        <button type="submit">Logout</button>
-    </form>
+    <br>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</body>
-</html>
+    
+    
+    <div class="d-flex justify-content-center">
+      <form action = {{ route('user.search') }} method="GET" class=" d-flex w-50" role="search">
+        <input class="form-control me-2" type="search" value="{{ old('query', $query ?? '') }}" name="query" placeholder="Search books" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+   
+    <div class="m-5 d-inline-block border">
 
+      <h5>Books Genres</h5>
 
-{{-- @extends('layouts.app')
+        
+        <form action="{{ route('user.dashboard') }}" method="GET" id="filter-form">
 
+          @if (isset($genre))
+            <ul>
+              @foreach ($genre as $genres)
+                <div>
+                  <input type="checkbox" name="genres[]" value="{{ $genres->id }}">
+                  <label>{{ $genres->book_genre }}</label>
+                </div>
+              @endforeach
+            </ul>
+          @endif
 
-@section('content')
+          <button type="submit" class="btn btn-outline-success">Filter</button>
+        </form>
+        
+      
 
-<div class="container">
-
-    <div class="row justify-content-center">
-
-        <h1>Welkom To User Page</h1>
-
-        <br><br>
-
-        <h2>See Available Books</h2>
-        <br><br>
-        <a href="/books">See Books</a>
     </div>
 
 
 
 
-</div>
+    @if (isset($query) && !empty($query))
 
-@endsection --}}
+      <div class="alert alert-info alert-dismissable fade show" role="alert">
+        Search results for: <strong>{{ $query }}</strong>
+        <button onclick="window.location.href='{{ route('user.dashboard') }}'" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+
+      @elseif (isset($books))
+
+      <div class="alert alert-info alert-dismissable fade show" role="alert">
+          Search results for: <strong>{{ $books->first()->genre->book_genre }}</strong>
+          <button onclick="window.location.href='{{ route('user.dashboard') }}'" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+     
+    @endif
+
+    <br><br>
+  
+    @if (isset($books) && $books->isEmpty())
+      <p>book not found.</p>
+    
+    @elseif (isset($books) && !$books->isEmpty())
+      <ul>
+        @foreach ($books as $book)
+          <li>
+            Book genre: {{ $book->genre->book_genre }} <br>
+            {{ $book->book_title }} by {{ $book->book_author }} <br>
+            published by {{ $book->publisher }}
+          </li>
+        @endforeach
+      </ul>
+    @endif
+
+
+    <br><br>
+    
+   
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
+

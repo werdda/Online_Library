@@ -17,6 +17,16 @@
             
         @endforeach
     </ul>
+
+    <h1>Genre</h1>
+    
+    <ul>
+        @foreach ($genre as $genres)
+
+            <li>{{ $genres->book_genre }}</li>
+            
+        @endforeach
+    </ul>
     
 </body>
 </html>

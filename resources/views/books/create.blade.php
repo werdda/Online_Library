@@ -17,6 +17,8 @@
         <input type="text" name="book_author" id="book_author" required><br><br>
         <label for="publisher">Publisher:</label>
         <input type="text" name="publisher" id="publisher" required><br><br>
+        <label for="book_genre">Book Genre</label>
+        <input type="text" name="book_genre" id="book_genre" required><br><br>
     
         <button type="submit">Add Book</button>
     

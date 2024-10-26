@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\AuthMiddleware;
 
+use function Laravel\Prompts\search;
+
 Auth::routes();
 
 Route::get('/home', function () {
@@ -28,11 +30,7 @@ Route::get('/admin/dashboard', function () {
 
 });
 
-Route::get('/user/dashboard', function () {
-
-    return view('user.dashboard');
-
-});
+Route::get('/user/dashboard', [BookController::class, 'search'])->name("user.dashboard");
 
 
 Route::post('/logout', function () {
@@ -54,5 +52,5 @@ Route::middleware([AuthMiddleware::class, AdminMiddleware::class])->group(functi
 
 Route::post("/books", [BookController::class,'store']);
 
-
+Route::get("/user/search", [BookController::class, 'search'])->name('user.search');
 
