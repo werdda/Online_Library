@@ -1,19 +1,10 @@
 {
-    "builds": [
-      {
-        "src": "index.php",
-        "use": "@vercel/php"
-      }
-    ],
-    "build": {
-      "env": {
-        "COMPOSER_ALLOW_SUPERUSER": "1"
-      },
-      "commands": [
-        "curl -sS https://getcomposer.org/installer | php",
-        "php composer.phar install",
-        "php artisan optimize"
-      ]
+  "builds": [
+    {
+      "src": "index.php",
+      "use": "@vercel/php"
     }
+  ]
 }
+
   
