@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Book;
 
 class User extends Authenticatable
 {
@@ -20,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_img',
     ];
 
     /**
@@ -53,6 +55,16 @@ class User extends Authenticatable
     public function isUser()
     {
         return $this->role === 'user';
+    }
+
+    public function favourites(){
+
+        return $this->belongsToMany(Book::class, 'favourite_table', 'user_id', 'book_id');
+    }
+
+    public function genreVisit(){
+
+        return $this->hasMany(userRecommendation::class);
     }
 
 }

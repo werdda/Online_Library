@@ -16,6 +16,7 @@ class AuthMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        
         if (!Auth::check()) {
             // If user is not logged in, redirect to login
             return redirect('/login');

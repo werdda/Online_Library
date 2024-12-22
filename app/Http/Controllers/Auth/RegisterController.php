@@ -28,7 +28,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -47,13 +47,44 @@ class RegisterController extends Controller
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+    {   
+
+        // dd($data);
+        $register = $data['register'];
+        $registerField = filter_var($register, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+
+        // return Validator::make($data, [
+        //     'name' => ['required', 'string', 'max:255', 'unique:users'],
+        //     'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
+        //     'password' => ['required', 'string', 'min:8', 'confirmed'],
+        // ]);
+
+        $rules = [
+            'register' => ['required', 'string', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        ];
+
+        
+        // Add email validation if it's determined to be an email
+        if ($registerField === 'email') {
+            $rules['email'] = ['required', 'string', 'email', 'max:255', 'unique:users'];
+            unset($rules['register']); // Remove the 'register' rule as it's replaced by 'email'
+            $data['email'] = $data['register'];
+            unset($data['register']);
+
+        } else {
+
+            $rules['name'] = ['required', 'string', 'max:255', 'unique:users'];
+            unset($rules['register']); // Remove the 'register' rule as it's replaced by 'name'
+            $data['name'] = $data['register'];
+            unset($data['register']);
+            // dd($rules['name']);
+        }
+
+        return Validator::make($data, $rules);
+
     }
+
 
     /**
      * Create a new user instance after a valid registration.
@@ -63,11 +94,42 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'role'=> User::count() === 0 ? 'admin' : 'user'
-        ]);
+
+        // dd($data);
+        $registerField = filter_var($data['register'], FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+
+        if ($registerField === 'email') {
+
+            $data['email'] = $data['register'];
+            unset($data['register']);
+            
+            return User::create([
+
+                'name' => null,
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'role'=> User::count() === 0 ? 'admin' : 'user'
+            ]);
+
+        } else {
+
+            $data['name'] = $data['register'];
+            unset($data['register']);
+
+            return User::create([
+
+                'name' => $data['name'],
+                'email' => null,
+                'password' => Hash::make($data['password']),
+                'role'=> User::count() === 0 ? 'admin' : 'user'
+            ]);
+            
+        }
+        // return User::create([
+
+        //     'register' => $data['register'],
+        //     'password' => Hash::make($data['password']),
+        //     'role'=> User::count() === 0 ? 'admin' : 'user'
+        // ]);
     }
 }

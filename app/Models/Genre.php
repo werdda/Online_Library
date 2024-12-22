@@ -16,4 +16,9 @@ class Genre extends Model
 
         return $this->hasMany(Book::class);
     }
+
+    public function userVisit(){
+
+        return $this->hasMany(userRecommendation::class);
+    }
 }

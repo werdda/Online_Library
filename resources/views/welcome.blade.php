@@ -37,16 +37,12 @@
     @include('layouts.navbar')
     
     <h1 class="pt-5 text-center">Welcome to Online Library</h1>
-    <a href="/books">See Available Books</a><br><br>
+    {{-- <a href="/books">See Available Books</a><br><br> --}}
     
-
-    <a href="/books/create">Add a New Book</a><br><br>
-    <a href="/login">login</a>
-    <br><br>
-    <form action="{{ route('logout') }}" method="POST">
-        @csrf
-        <button type="submit">Logout</button>
-    </form>
+    
+    {{-- <a href="/books/create">Add a New Book</a><br><br> --}}
+    
+    
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 

@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('books', function (Blueprint $table) {
-
-            $table->foreign('genre_id')->references('id')->on('genre');
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('profile_img')->nullable();
         });
     }
 
@@ -22,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('books', function (Blueprint $table) {
-           $table->dropColumn('genre_id');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('profile_img');
         });
     }
 };

@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('books', function (Blueprint $table) {
-
-            $table->foreign('genre_id')->references('id')->on('genre');
+            $table->string('book_thumbnail',500)->nullable();
         });
     }
 
@@ -23,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('books', function (Blueprint $table) {
-           $table->dropColumn('genre_id');
+            $table->dropColumn('book_thumbnail');
         });
     }
 };
